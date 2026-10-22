@@ -18,7 +18,7 @@ from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parent
 SAMPLES = ('S001R01', 'S001R03', 'S002R03')
-SOURCE = 'https://physionet.org/files/eegmmidb/1.0.0/'
+SOURCE = 'https://physionet-open.s3.amazonaws.com/eegmmidb/1.0.0/'
 JOBS = {}
 LOCK = threading.Lock()
 BUSY = threading.Semaphore(1)
