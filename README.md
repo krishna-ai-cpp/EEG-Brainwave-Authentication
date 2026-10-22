@@ -4,7 +4,11 @@ A first-year B.Tech Artificial Intelligence project by Krishna at SRM University
 
 ## Browser interface
 
-The separately authorized `web_app.py` and `index.html` add a browser interface around the **unchanged** `hello.py`. No additional Python libraries are required. The public interface processes three fixed, public PhysioNet recordings and exposes actual plots and validation summaries. It accepts no personal EEG uploads, arbitrary file paths, or remote URLs. Temporary sample files and analysis outputs are removed after each run. Results are held in memory for up to 20 minutes and the most recent ten runs; requests cannot list other runs.
+The separately authorized `web_app.py` and `index.html` add a browser interface around the **unchanged** `hello.py`. No additional Python libraries are required. [Open the live workspace](https://eeg-brainwave-lab.onrender.com/).
+
+The workspace starts empty: upload your own authorized, deidentified EDF recordings (1–12 files, up to 8 MB each and 20 MB total). Enter pseudonymous subject IDs and genuine session/group IDs. Recordings from the same session must share a group; separate task runs do not automatically count as independent sessions. No recordings are preloaded or downloaded by the application.
+
+Files are transmitted to the Render server for processing. Temporary uploads and analysis outputs are removed after each run. Results are held in memory for up to 20 minutes and the most recent ten runs; requests cannot list other runs. Use the local workflow for private biometric recordings. The free service accepts one analysis at a time and may need time to wake up.
 
 ```bash
 python -m venv .venv
@@ -25,13 +29,15 @@ Open http://localhost:8080. On Render use a Python web service, build command `p
 
 ## What this demo establishes
 
-The public demo is a preprocessing demonstration, **not a trained authentication product**. Its sample is insufficient for the script's minimum of three independent recording/session groups per person. Runs from one subject are conservatively assigned to one group because separate task runs do not prove independent sessions. SVM fitting is deliberately stopped by the original data guard. No accuracy, FAR, FRR, EER, AUC, CNN performance, or fusion improvement is claimed. Quality flags require investigation. Not for medical diagnosis or real access-control decisions.
+The UI exposes preprocessing plots, quality flags, and real SVM outputs when the original data requirements are met: at least two people and three independent recording/session groups per person. It preserves the original data and artifact-review guards. The optional CNN checkbox builds the original architecture after successful SVM evaluation; **the source does not train or evaluate the CNN**. No fusion model is implemented. A CNN build that exceeds the hosting runtime reports that limitation while retaining completed SVM results.
+
+Synthetic integration checks verify that both SVM evaluation and CNN architecture construction can be invoked through the adapter. They do not establish real-world biometric performance. Public EEG examples used in the video demonstrate preprocessing and the insufficient-session guard. No real-world accuracy or fusion improvement is claimed. Not for medical diagnosis or real access-control decisions.
 
 For the full local workflow run `python hello.py` with your own authorized data and a new results directory. Keep private recordings and derived biometric data out of Git.
 
 ## Public sample attribution
 
-The browser retrieves `S001R01.edf`, `S001R03.edf`, and `S002R03.edf` directly from the [PhysioNet EEG Motor Movement/Imagery Dataset, version 1.0.0](https://physionet.org/content/eegmmidb/1.0.0/). Recordings are not committed to this repository. Each run report includes download URLs and SHA-256 hashes.
+The demonstration uses manually selected public recordings from the [PhysioNet EEG Motor Movement/Imagery Dataset, version 1.0.0](https://physionet.org/content/eegmmidb/1.0.0/). Recordings are not committed to this repository or preloaded in the app. Each run report includes uploaded file SHA-256 hashes.
 
 Schalk, G. (2009). EEG Motor Movement/Imagery Dataset (version 1.0.0). PhysioNet. https://doi.org/10.13026/C28G6P. Data license: [Open Data Commons Attribution License v1.0](https://opendatacommons.org/licenses/by/1-0/).
 
