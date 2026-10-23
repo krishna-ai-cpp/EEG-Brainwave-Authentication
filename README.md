@@ -2,6 +2,12 @@
 
 A first-year B.Tech Artificial Intelligence project by Krishna at SRM University–AP: explore EEG preprocessing, quality checks, statistical features, and a recording-aware SVM authentication protocol.
 
+## Updated UI demo
+
+[Watch or download the demo video](https://github.com/krishna-ai-cpp/EEG-Brainwave-Authentication/blob/main/EEG-Lab-Demo-v2.mp4) · [Direct MP4](https://raw.githubusercontent.com/krishna-ai-cpp/EEG-Brainwave-Authentication/main/EEG-Lab-Demo-v2.mp4)
+
+64 seconds, 1920×1080, 24 fps. An edited HyperFrames walkthrough of actual Render UI captures and the completed local BI2015a report: uploads, signal previews, quality flags, SVM final outputs, CNN architecture and downloads. Full decoding and representative frames were checked. The publicly accessible video matches SHA-256 `b77c9fba6e1426f7b216598cf2dbdaa01c118ba1aa45ce541111da97fdec391e`.
+
 ## Browser interface
 
 The separately authorized `web_app.py` and `index.html` add a browser interface around the **unchanged** `hello.py`. No additional Python libraries are required. [Open the live workspace](https://eeg-brainwave-lab.onrender.com/).
@@ -64,7 +70,11 @@ The rebuilt adapter's local and hosted integration checks verify downloaded NPY 
 
 ## BI2015 full-dataset verification
 
-Full published archives are checked locally in Ubuntu, outside this repository and the Render service. BI2015a completed successfully: 43 available subjects, 129 game recordings, 20,933 complete windows, 43 SVMs, and the optional CNN architecture summary. All 172 additional calibration recordings were also preprocessed separately and correctly stopped at the original independent-group requirement. BI2015b processing is still in progress; no completed result is claimed for it yet.
+All 65 published MAT archives (9,830,228,468 bytes) passed publisher MD5 checksum verification locally in Ubuntu, outside this repository and the Render service. BI2015a completed successfully: 43 available subjects, 129 game recordings, 20,933 complete windows, 43 SVMs, and the optional CNN architecture summary. All 172 additional calibration recordings were also preprocessed separately and correctly stopped at the original independent-group requirement.
+
+BI2015b completed preprocessing for all 44 subjects and 176 recordings: 46,856 complete windows, with 43,834 flagged. The original script then stopped with `SVM not fitted: need at least 3 independent recordings/session groups per person`; every person has one genuine session group. This expected guard preserves the published protocol. No SVM or CNN evaluation is claimed for BI2015b.
+
+For both complete game datasets, every window's saved mean/std/variance features was numerically checked against its NPY array. BI2015a's 3,698 validation/test score rows were checked against frozen thresholds, per-subject FAR/FRR and recording counts, and group assignments were checked for split overlap. Original EEG and generated biometric arrays remain outside GitHub.
 
 BI2015a macro test outputs: FAR 0.0110742, FRR 0.3953488, approximate EER 0.0085825, ROC AUC 0.9828350, accuracy 0.9799892. These are fractions. Each subject has only one genuine and 42 impostor test recordings: the high accuracy must be read alongside the **39.5% false-rejection rate** and class imbalance. **19,649 of 20,933 windows were flagged for high amplitude**. Quality tables and signal previews were inspected before explicitly continuing the unchanged pipeline; no windows were silently removed. This is an exploratory within-visit execution result, not validated authentication performance.
 
@@ -79,7 +89,9 @@ To inspect a completed benchmark in the same UI, use `python web_app.py --run-su
 
 ## Public sample attribution
 
-The demonstration uses manually selected public recordings from the [PhysioNet EEG Motor Movement/Imagery Dataset, version 1.0.0](https://physionet.org/content/eegmmidb/1.0.0/). Recordings are not committed to this repository or preloaded in the app. Each run report includes uploaded file SHA-256 hashes.
+The updated demonstration uses public BI2015a recordings: Korczowski et al., Brain Invaders 2015a, [Zenodo record 3266930](https://zenodo.org/records/3266930), CC BY 4.0. It includes two complete calibration recordings on Render and the complete game-session evaluation locally. Recordings are not committed to this repository or preloaded in the app. Each upload run report includes file SHA-256 hashes.
+
+The earlier prototype used manually selected public recordings from the [PhysioNet EEG Motor Movement/Imagery Dataset, version 1.0.0](https://physionet.org/content/eegmmidb/1.0.0/); its attribution is retained below.
 
 Schalk, G. (2009). EEG Motor Movement/Imagery Dataset (version 1.0.0). PhysioNet. https://doi.org/10.13026/C28G6P. Data license: [Open Data Commons Attribution License v1.0](https://opendatacommons.org/licenses/by/1-0/).
 
