@@ -3,6 +3,7 @@
 No filtering, feature extraction, model fitting or thresholds are reimplemented here.
 """
 import base64
+import argparse
 import csv
 import hashlib
 import json
@@ -77,6 +78,7 @@ def collect(job):
         'features': 3 * len(checks[0]['channels'].split('|')) if checks else 0,
         'sampling_hz': float(checks[0]['sampling_hz']) if checks else None,
         'settings': job['_settings'], 'provenance': job['_provenance'],
+        'download_bundle': not job.get('_external', False),
         'pipeline_sha256': hashlib.sha256((ROOT / 'hello.py').read_bytes()).hexdigest(),
         'svm_metrics': metrics, 'cnn_summary': cnn,
         'cnn_status': ('Architecture built only; not trained or evaluated.' if cnn else
@@ -135,6 +137,8 @@ def execute(job, folder, output):
                             job.update(state='running', stage='Evaluating recording-level SVMs', progress=75)
                         marker = 'Build the CNN candidate too? Type yes or press Enter to finish:'
                         if marker in text and marker not in answered:
+                            # SVM outputs already exist; show them while TensorFlow imports/builds.
+                            job['result'] = collect(job)
                             process.stdin.write(b'yes\n' if settings['cnn'] else b'no\n')
                             process.stdin.flush()
                             answered.add(marker)
@@ -207,7 +211,8 @@ def run_pipeline(job, uploads):
 def expire(job):
     with LOCK:
         JOBS.pop(job['_key'], None)
-        shutil.rmtree(job['_temp'], ignore_errors=True)
+        if not job.get('_external'):
+            shutil.rmtree(job['_temp'], ignore_errors=True)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -268,7 +273,7 @@ class Handler(BaseHTTPRequestHandler):
                     path = output / parts[4]
                     if path.is_file():
                         return self.send_file(path, not path.name.endswith('.png'))
-                if len(parts) == 4 and parts[3] == 'download' and job.get('_done'):
+                if len(parts) == 4 and parts[3] == 'download' and job.get('_done') and not job.get('_external'):
                     target = Path(job['_temp']) / 'eeg-results.zip'
                     if not target.exists():
                         with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as archive:
@@ -355,5 +360,31 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-summary', type=Path, help='Open an existing benchmark execution_summary.json read-only, on localhost only')
+    parser.add_argument('--port', type=int, default=int(os.environ.get('PORT', '8080')))
+    args = parser.parse_args()
+    host = '0.0.0.0'
+    if args.run_summary:
+        summary = json.loads(args.run_summary.read_text())
+        if summary['source_sha256'] != hashlib.sha256((ROOT / 'hello.py').read_bytes()).hexdigest():
+            raise ValueError('Saved run source fingerprint differs from this hello.py.')
+        out = Path(summary['output']).resolve(strict=True)
+        checks = table(out / 'recording_checks.csv', limit=10000)['rows']
+        key = secrets.token_urlsafe(24)
+        code = summary['exit_code']
+        state = 'complete' if code == 0 else 'blocked' if (out / 'baseline_status.txt').exists() else 'error'
+        stage = 'Saved full-dataset output — ' + ('pipeline finished' if code == 0 else 'original script stopped; inspect status and console')
+        job = dict(state=state, stage=stage, progress=100, exit_code=code, console='',
+                   _key=key, _external=True, _done=True, _temp=str(out.parent), _output=str(out),
+                   _settings=summary['settings'], _names=[Path(x['path']).name for x in checks], _provenance=[])
+        log = out.parent / 'pipeline.log'
+        if log.exists():
+            job['console'] = safe_text(log.read_text(errors='replace')[-100000:], job)
+        job['result'] = collect(job)
+        job['result']['training'] = stage
+        JOBS[key] = job
+        host = '127.0.0.1'
+        print(f'Read-only saved run: http://localhost:{args.port}/?run={key}', flush=True)
     print('EEG browser interface ready', flush=True)
-    ThreadingHTTPServer(('0.0.0.0', int(os.environ.get('PORT', '8080'))), Handler).serve_forever()
+    ThreadingHTTPServer((host, args.port), Handler).serve_forever()
