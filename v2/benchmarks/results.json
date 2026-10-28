@@ -1,0 +1,283 @@
+{
+  "recorded_date": "2026-10-28",
+  "hardware": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+  "frameworks": {
+    "tensorflow": "2.21.0",
+    "pytorch": "2.11.0+cu128",
+    "optuna": "5.0.0"
+  },
+  "input_shape_single": [
+    1,
+    64,
+    320
+  ],
+  "input_shape_batch": [
+    32,
+    64,
+    320
+  ],
+  "warmups": 25,
+  "timed_responses_per_run": 100,
+  "independent_runs": 3,
+  "scope": "Eager float32 untrained architecture inference, CPU NumPy input/output; no preprocessing, normalization, imports, model creation or Optuna search in the warmed timer.",
+  "initial_four_thread": {
+    "cnn": [
+      {
+        "framework": "tensorflow",
+        "device": "cpu",
+        "batch_size": 1,
+        "median_ms": 14.697606,
+        "run_medians_ms": [
+          14.697606,
+          14.3862095,
+          14.965549
+        ]
+      },
+      {
+        "framework": "tensorflow",
+        "device": "cpu",
+        "batch_size": 32,
+        "median_ms": 17.527999,
+        "run_medians_ms": [
+          17.574830499999997,
+          17.527999,
+          17.258032
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "cpu",
+        "batch_size": 1,
+        "median_ms": 0.845696,
+        "run_medians_ms": [
+          1.149292,
+          0.845696,
+          0.183631
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "cpu",
+        "batch_size": 32,
+        "median_ms": 1.626598,
+        "run_medians_ms": [
+          2.2253670000000003,
+          1.1330415,
+          1.626598
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "gpu",
+        "batch_size": 1,
+        "median_ms": 0.5858745000000001,
+        "run_medians_ms": [
+          0.5858745000000001,
+          1.0770185,
+          0.569358
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "gpu",
+        "batch_size": 32,
+        "median_ms": 0.9953695,
+        "run_medians_ms": [
+          1.2087145000000001,
+          0.947193,
+          0.9953695
+        ]
+      }
+    ],
+    "script_elapsed": [
+      {
+        "kind": "actual_EDF_preprocessing_to_data_guard",
+        "variant": "original",
+        "median_seconds": 4.992603771999711,
+        "run_seconds": [
+          5.901750822999929,
+          4.992603771999711,
+          4.933235169
+        ]
+      },
+      {
+        "kind": "actual_EDF_preprocessing_to_data_guard",
+        "variant": "pytorch",
+        "median_seconds": 7.1302379910002855,
+        "run_seconds": [
+          9.91728315599994,
+          7.0016929019998315,
+          7.1302379910002855
+        ]
+      },
+      {
+        "kind": "synthetic_preprocessing_and_SVM",
+        "variant": "original",
+        "median_seconds": 5.649103649999688,
+        "run_seconds": [
+          5.649103649999688,
+          4.936976314999811,
+          6.5117053320000196
+        ]
+      },
+      {
+        "kind": "synthetic_preprocessing_and_SVM",
+        "variant": "pytorch",
+        "median_seconds": 7.42881732900014,
+        "run_seconds": [
+          7.42881732900014,
+          7.419404390000182,
+          7.846222769000178
+        ]
+      }
+    ]
+  },
+  "later_four_thread": {
+    "cnn": [
+      {
+        "framework": "tensorflow",
+        "device": "cpu",
+        "batch_size": 1,
+        "median_ms": 9.870435,
+        "run_medians_ms": [
+          9.2941105,
+          12.609232,
+          9.870435
+        ]
+      },
+      {
+        "framework": "tensorflow",
+        "device": "cpu",
+        "batch_size": 32,
+        "median_ms": 14.142200500000001,
+        "run_medians_ms": [
+          12.735178000000001,
+          15.383782,
+          14.142200500000001
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "cpu",
+        "batch_size": 1,
+        "median_ms": 0.7857955000000001,
+        "run_medians_ms": [
+          0.1653665,
+          0.7857955000000001,
+          1.0549629999999999
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "cpu",
+        "batch_size": 32,
+        "median_ms": 1.5303345,
+        "run_medians_ms": [
+          1.1268120000000001,
+          1.5303345,
+          2.3749875
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "gpu",
+        "batch_size": 1,
+        "median_ms": 0.603561,
+        "run_medians_ms": [
+          0.603561,
+          0.5845055,
+          0.986925
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "gpu",
+        "batch_size": 32,
+        "median_ms": 0.9464794999999999,
+        "run_medians_ms": [
+          0.8647075,
+          0.9464794999999999,
+          1.3550710000000001
+        ]
+      }
+    ],
+    "same_cpu_speedup": 12.561073459952366
+  },
+  "single_thread": {
+    "cnn": [
+      {
+        "framework": "tensorflow",
+        "device": "cpu",
+        "batch_size": 1,
+        "median_ms": 12.164699,
+        "run_medians_ms": [
+          24.5682105,
+          12.164699,
+          9.048816500000001
+        ]
+      },
+      {
+        "framework": "tensorflow",
+        "device": "cpu",
+        "batch_size": 32,
+        "median_ms": 15.5356665,
+        "run_medians_ms": [
+          31.7938425,
+          15.5356665,
+          15.127749999999999
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "cpu",
+        "batch_size": 1,
+        "median_ms": 0.3168105,
+        "run_medians_ms": [
+          0.20514349999999998,
+          0.3168105,
+          0.329846
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "cpu",
+        "batch_size": 32,
+        "median_ms": 4.69498,
+        "run_medians_ms": [
+          4.4474625,
+          4.9747935000000005,
+          4.69498
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "gpu",
+        "batch_size": 1,
+        "median_ms": 0.564435,
+        "run_medians_ms": [
+          0.564435,
+          0.5373135,
+          0.7039044999999999
+        ]
+      },
+      {
+        "framework": "pytorch",
+        "device": "gpu",
+        "batch_size": 32,
+        "median_ms": 0.9246755,
+        "run_medians_ms": [
+          0.922142,
+          0.9246755,
+          1.7169025
+        ]
+      }
+    ],
+    "same_cpu_speedup": 38.39739844481165
+  },
+  "limitations": [
+    "TensorFlow detected no GPU.",
+    "Thread counts match within each CPU comparison.",
+    "Trials and test data are not an authentication accuracy evaluation.",
+    "System load and CPU/GPU clocks affect timing; no fixed 17x guarantee."
+  ]
+}

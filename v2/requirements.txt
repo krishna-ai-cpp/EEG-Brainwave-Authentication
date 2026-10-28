@@ -1,0 +1,8 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
+mne
+numpy
+pandas
+matplotlib
+scikit-learn
+torch==2.11.0+cu128
+optuna==5.0.0

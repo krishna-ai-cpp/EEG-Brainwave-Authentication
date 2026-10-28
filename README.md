@@ -2,6 +2,44 @@
 
 A first-year B.Tech Artificial Intelligence project by Krishna at SRM University–AP: explore EEG preprocessing, quality checks, statistical features, and a recording-aware SVM authentication protocol.
 
+## Choose a version
+
+This repository preserves the original EEG project and adds the upgraded version alongside it.
+
+| Version | Open the code | What it provides |
+|---|---|---|
+| **V1 — original TensorFlow project** | [hello.py](hello.py) · [browser app](web_app.py) | The existing script, browser interface, demo and previously documented research runs |
+| **V2 — PyTorch, GPU and Optuna** | [v2/README.md](v2/README.md) · [v2/hello.py](v2/hello.py) | Beginner-friendly Dataset/model classes, DataLoaders, CUDA/CPU execution and an optional six-trial CNN search |
+
+**V1 stays intact.** Its root script, requirements, browser files and video are unchanged. The existing browser app still runs V1. V2 is a separate command-line workflow with its own requirements; it is not a new deployment of the browser app.
+
+### Start with V2
+
+```bash
+git clone https://github.com/krishna-ai-cpp/EEG-Brainwave-Authentication.git
+cd EEG-Brainwave-Authentication/v2
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python hello.py
+```
+
+After successful baseline evaluation, choose `preview` for the untrained CNN or `tune` for **six Optuna trials**. The search changes learning rate and training batch size while keeping the CNN architecture fixed. It uses training/validation groups and saves the best checkpoint, including training normalization. Test data stays out of the search.
+
+V2 preserves the EEG preprocessing, statistical features, grouped SVM workflow and data-review guards. At least two people and three independent recording/session groups per person are required before fitting/tuning. Synthetic checks establish that the code executes; no V2 authentication accuracy is claimed.
+
+### Faster CNN response, with measured scope
+
+The first same-CPU comparison measured **14.70 ms → 0.85 ms per prepared EEG window (about 17x)**. A later matched single-thread comparison measured **12.16 ms → 0.32 ms (about 38x)**. A separate four-thread repeat measured about 12.6x. Ratios vary with settings and load; 17x is not a fixed guarantee.
+
+These are warmed, untrained CNN architecture benchmarks, **not a whole-project or training speedup**. Preprocessing and SVM still run on CPU; PyTorch startup adds overhead, and Optuna is additional offline training work. [Read methods, repeat measurements and limitations](v2/benchmarks/README.md).
+
+[V2 setup and comparison](v2/README.md) · [Optuna walkthrough](v2/OPTUNA-GUIDE.md) · [synthetic tests](v2/tests/test_v2.py) · [original V1 snapshot](https://github.com/krishna-ai-cpp/EEG-Brainwave-Authentication/tree/93cd35699f8d351ed973e5171d91186ea74a9d62)
+
+## Preserved V1 documentation
+
+The following sections describe the unchanged original browser project and its earlier research results. Those results have not been reclassified as V2 results.
+
 ## Updated UI demo
 
 [Watch or download the demo video](https://github.com/krishna-ai-cpp/EEG-Brainwave-Authentication/blob/main/EEG-Lab-Demo-v2.mp4) · [Direct MP4](https://raw.githubusercontent.com/krishna-ai-cpp/EEG-Brainwave-Authentication/main/EEG-Lab-Demo-v2.mp4)
